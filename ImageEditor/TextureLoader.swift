@@ -21,7 +21,7 @@ class TextureLoader {
         self.textureLoader = MTKTextureLoader(device: device)
     }
 
-    func get(named: String, extension: String) throws -> (in: MTLTexture, out: MTLTexture) {
+    func get(named: String, extension: String) throws -> MTLTexture {
         guard let url = Bundle.main.url(forResource: named, withExtension: `extension`) else {
             throw Error.imageNotFound
         }
@@ -33,18 +33,6 @@ class TextureLoader {
         guard let inTexture = try? textureLoader.newTexture(URL: url, options: textureLoaderOption) else {
             throw Error.imageNotFound
         }
-
-        let outTextureDescriptor = MTLTextureDescriptor.texture2DDescriptor(
-            pixelFormat: .rgba8Unorm,
-            width: inTexture.width,
-            height: inTexture.height,
-            mipmapped: false)
-
-        outTextureDescriptor.usage = [.shaderWrite, .shaderRead]
-        guard let outTexture = textureLoader.device.makeTexture(descriptor: outTextureDescriptor) else {
-            throw Error.invalidTexture
-        }
-
-        return (inTexture, outTexture)
+        return inTexture
     }
 }

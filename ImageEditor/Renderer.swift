@@ -10,53 +10,42 @@ import Foundation
 import Metal
 import MetalKit
 
-struct Brithness {
-  let brithness: Float
-}
-
 class TextureRenderer {
     let device: MTLDevice
     let library: MTLLibrary
     let commandQueue: MTLCommandQueue
-    let computePipelineState: MTLComputePipelineState
 
     var brithness: Float = 0
 
-    init(functionName: String) throws {
-        guard let device = MTLCreateSystemDefaultDevice() else {
-            throw Error.deviceNotExists
-        }
-
+    init(device: MTLDevice) throws {
         guard let libraryPath = Bundle.main.path(forResource: "default", ofType: "metallib") else {
             throw Error.libraryNotExists
         }
+
         self.device = device
         self.library = try device.makeLibrary(filepath: libraryPath)
         self.commandQueue = device.makeCommandQueue()!
-
-        guard let kernelFunction = library.makeFunction(name: functionName) else {
-            throw Error.functionNotFound
-        }
-
-        self.computePipelineState = try device.makeComputePipelineState(function: kernelFunction)
     }
 
-    func applyKernel(inTexture: MTLTexture, outTexture: MTLTexture, into drawable: CAMetalDrawable) {
+    func apply(kernel: Kernel, inTexture: MTLTexture, into drawable: CAMetalDrawable) {
         guard let commandBuffer = commandQueue.makeCommandBuffer(),
             let commandEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
 
+        let outTexture = drawable.texture
+
         let threads = makeThreadgroups(textureWidth: outTexture.width, textureHeight: outTexture.height)
 
+        guard let kernelFunction = library.makeFunction(name: kernel.functionName),
+            let pipelineState = try? device.makeComputePipelineState(function: kernelFunction) else {
+            // todo: handle optional
+            return
+        }
 
-
-        let drawwingTexture = drawable.texture
-
-        commandEncoder.setComputePipelineState(computePipelineState)
+        commandEncoder.setComputePipelineState(pipelineState)
         commandEncoder.setTexture(inTexture, index: 0)
-        commandEncoder.setTexture(drawwingTexture, index: 1)
+        commandEncoder.setTexture(outTexture, index: 1)
 
-        var brithness = Brithness(brithness: self.brithness)
-        commandEncoder.setBytes(&brithness, length: MemoryLayout<Float>.stride, index: 0)
+        kernel.operation(encoder: commandEncoder)
 
         commandEncoder.dispatchThreadgroups(threads.threadgroupsPerGrid, threadsPerThreadgroup: threads.threadsPerThreadgroup)
         commandEncoder.endEncoding()

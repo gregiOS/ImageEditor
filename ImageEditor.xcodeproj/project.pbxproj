@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		B27A67A123FB1F62001E938D /* TextureLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27A67A023FB1F62001E938D /* TextureLoader.swift */; };
 		B27A67A32402B736001E938D /* peru.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = B27A67A22402B736001E938D /* peru.jpeg */; };
+		B27A67A52402DE3F001E938D /* Kernel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27A67A42402DE3F001E938D /* Kernel.swift */; };
+		B27A67A82402DE55001E938D /* BrithnessKernel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27A67A72402DE55001E938D /* BrithnessKernel.swift */; };
 		B291AF5E23F958DD000D5A4F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B291AF5D23F958DD000D5A4F /* AppDelegate.swift */; };
 		B291AF6023F958DD000D5A4F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B291AF5F23F958DD000D5A4F /* SceneDelegate.swift */; };
 		B291AF6223F958DD000D5A4F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B291AF6123F958DD000D5A4F /* ViewController.swift */; };
@@ -33,6 +35,8 @@
 /* Begin PBXFileReference section */
 		B27A67A023FB1F62001E938D /* TextureLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureLoader.swift; sourceTree = "<group>"; };
 		B27A67A22402B736001E938D /* peru.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = peru.jpeg; sourceTree = "<group>"; };
+		B27A67A42402DE3F001E938D /* Kernel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kernel.swift; sourceTree = "<group>"; };
+		B27A67A72402DE55001E938D /* BrithnessKernel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrithnessKernel.swift; sourceTree = "<group>"; };
 		B291AF5A23F958DD000D5A4F /* ImageEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B291AF5D23F958DD000D5A4F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B291AF5F23F958DD000D5A4F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +70,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B27A67A62402DE4E001E938D /* Kernels */ = {
+			isa = PBXGroup;
+			children = (
+				B27A67A72402DE55001E938D /* BrithnessKernel.swift */,
+			);
+			path = Kernels;
+			sourceTree = "<group>";
+		};
 		B291AF5123F958DD000D5A4F = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +99,7 @@
 		B291AF5C23F958DD000D5A4F /* ImageEditor */ = {
 			isa = PBXGroup;
 			children = (
+				B27A67A62402DE4E001E938D /* Kernels */,
 				B27A67A22402B736001E938D /* peru.jpeg */,
 				B291AF5D23F958DD000D5A4F /* AppDelegate.swift */,
 				B291AF5F23F958DD000D5A4F /* SceneDelegate.swift */,
@@ -98,6 +111,7 @@
 				B291AF7F23F958F1000D5A4F /* Renderer.swift */,
 				B27A67A023FB1F62001E938D /* TextureLoader.swift */,
 				B291AF8123F95B9C000D5A4F /* Shaders.metal */,
+				B27A67A42402DE3F001E938D /* Kernel.swift */,
 			);
 			path = ImageEditor;
 			sourceTree = "<group>";
@@ -216,9 +230,11 @@
 				B291AF8023F958F1000D5A4F /* Renderer.swift in Sources */,
 				B291AF8223F95B9C000D5A4F /* Shaders.metal in Sources */,
 				B27A67A123FB1F62001E938D /* TextureLoader.swift in Sources */,
+				B27A67A82402DE55001E938D /* BrithnessKernel.swift in Sources */,
 				B291AF6223F958DD000D5A4F /* ViewController.swift in Sources */,
 				B291AF5E23F958DD000D5A4F /* AppDelegate.swift in Sources */,
 				B291AF6023F958DD000D5A4F /* SceneDelegate.swift in Sources */,
+				B27A67A52402DE3F001E938D /* Kernel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

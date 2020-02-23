@@ -11,13 +11,13 @@ import MetalKit
 import Metal
 
 class ViewController: UIViewController {
-
-    private let metalView = MTKView(frame: .zero)
+    private let metalView = MTKView()
     private let slider = UISlider()
     var textureLoader: TextureLoader!
     var textureRenderer: TextureRenderer!
 
-    var textures: (MTLTexture, MTLTexture)?
+    var inTexture: MTLTexture?
+    var currentKernels: [Kernel] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,17 +44,23 @@ class ViewController: UIViewController {
 
     private func setup() {
         do {
-            textureRenderer = try TextureRenderer(functionName: "brithnessAdjustment")
-            textureLoader = TextureLoader(device: textureRenderer.device)
-            metalView.device = textureRenderer.device
-            textures = try textureLoader.get(named: "peru", extension: "jpeg")
+            let device = MTLCreateSystemDefaultDevice()!
+            textureRenderer = try TextureRenderer(device: device)
+            textureLoader = TextureLoader(device: device)
+            metalView.device = device
+            inTexture = try textureLoader.get(named: "peru", extension: "jpeg")
         } catch {
             print(error)
         }
     }
 
     @objc func didChangeState(sender: UISlider) {
-        textureRenderer.brithness = sender.value - 0.5
+        guard let index = currentKernels.firstIndex(where: { $0 is BrithnessKernel }) else {
+            let kernel = BrithnessKernel(brithness: sender.value - 0.5)
+            currentKernels.append(kernel)
+            return
+        }
+        currentKernels[index] = BrithnessKernel(brithness: sender.value - 0.5)
     }
 
 }
@@ -62,8 +68,10 @@ class ViewController: UIViewController {
 extension ViewController: MTKViewDelegate {
 
     func draw(in view: MTKView) {
-        guard let textures = textures, let drawable = metalView.currentDrawable else { return }
-        textureRenderer.applyKernel(inTexture: textures.0, outTexture: textures.1, into: drawable)
+        guard let inTexture = inTexture, let drawable = metalView.currentDrawable else { return }
+        currentKernels.forEach { kernel in
+            textureRenderer.apply(kernel: kernel, inTexture: inTexture, into: drawable)
+        }
     }
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
