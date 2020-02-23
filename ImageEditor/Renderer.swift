@@ -10,11 +10,17 @@ import Foundation
 import Metal
 import MetalKit
 
+struct Brithness {
+  let brithness: Float
+}
+
 class TextureRenderer {
     let device: MTLDevice
     let library: MTLLibrary
     let commandQueue: MTLCommandQueue
     let computePipelineState: MTLComputePipelineState
+
+    var brithness: Float = 0
 
     init(functionName: String) throws {
         guard let device = MTLCreateSystemDefaultDevice() else {
@@ -41,11 +47,16 @@ class TextureRenderer {
 
         let threads = makeThreadgroups(textureWidth: outTexture.width, textureHeight: outTexture.height)
 
+
+
         let drawwingTexture = drawable.texture
 
         commandEncoder.setComputePipelineState(computePipelineState)
         commandEncoder.setTexture(inTexture, index: 0)
         commandEncoder.setTexture(drawwingTexture, index: 1)
+
+        var brithness = Brithness(brithness: self.brithness)
+        commandEncoder.setBytes(&brithness, length: MemoryLayout<Float>.stride, index: 0)
 
         commandEncoder.dispatchThreadgroups(threads.threadgroupsPerGrid, threadsPerThreadgroup: threads.threadsPerThreadgroup)
         commandEncoder.endEncoding()

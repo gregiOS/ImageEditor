@@ -16,7 +16,8 @@ typedef struct {
 
 kernel void brithnessAdjustment(texture2d<half, access::read> inTexture [[ texture(0)]],
                                 texture2d<half, access::read_write> outTexture [[ texture(1) ]],
+                                constant BrightnessUniform& uniform [[ buffer(0) ]],
                                 uint2 gid [[ thread_position_in_grid ]]) {
     half3 color = inTexture.read(gid).rgb;
-    outTexture.write(half4(color, 1), gid);
+    outTexture.write(half4(color + uniform.brightness, 1), gid);
 }

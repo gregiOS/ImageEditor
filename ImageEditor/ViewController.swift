@@ -13,6 +13,7 @@ import Metal
 class ViewController: UIViewController {
 
     private let metalView = MTKView(frame: .zero)
+    private let slider = UISlider()
     var textureLoader: TextureLoader!
     var textureRenderer: TextureRenderer!
 
@@ -21,17 +22,24 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        slider.translatesAutoresizingMaskIntoConstraints = false
         metalView.translatesAutoresizingMaskIntoConstraints = false
         metalView.framebufferOnly = false
         metalView.autoResizeDrawable = false
         view.addSubview(metalView)
+        view.addSubview(slider)
         metalView.delegate = self
         NSLayoutConstraint.activate([
             metalView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             metalView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            metalView.topAnchor.constraint(equalTo: view.topAnchor),
             metalView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            metalView.topAnchor.constraint(equalTo: view.topAnchor)
+            slider.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            slider.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            slider.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+        slider.addTarget(self, action: #selector(didChangeState), for: .valueChanged)
+        slider.value = 0.5
     }
 
     private func setup() {
@@ -43,6 +51,10 @@ class ViewController: UIViewController {
         } catch {
             print(error)
         }
+    }
+
+    @objc func didChangeState(sender: UISlider) {
+        textureRenderer.brithness = sender.value - 0.5
     }
 
 }
