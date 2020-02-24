@@ -1,5 +1,5 @@
 //
-//  Renderer.swift
+//  TextureRenderer.swift
 //  ImageEditor
 //
 //  Created by Grzegorz Przybyła on 16/02/2020.
@@ -37,8 +37,8 @@ class TextureRenderer {
 
         guard let kernelFunction = library.makeFunction(name: kernel.functionName),
             let pipelineState = try? device.makeComputePipelineState(function: kernelFunction) else {
-            // todo: handle optional
-            return
+                // todo: handle optional
+                return
         }
 
         commandEncoder.setComputePipelineState(pipelineState)

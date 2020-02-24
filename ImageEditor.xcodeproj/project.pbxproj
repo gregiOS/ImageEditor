@@ -18,8 +18,9 @@
 		B291AF6723F958E2000D5A4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B291AF6623F958E2000D5A4F /* Assets.xcassets */; };
 		B291AF6A23F958E2000D5A4F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B291AF6823F958E2000D5A4F /* LaunchScreen.storyboard */; };
 		B291AF7523F958E2000D5A4F /* ImageEditorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B291AF7423F958E2000D5A4F /* ImageEditorTests.swift */; };
-		B291AF8023F958F1000D5A4F /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B291AF7F23F958F1000D5A4F /* Renderer.swift */; };
+		B291AF8023F958F1000D5A4F /* TextureRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B291AF7F23F958F1000D5A4F /* TextureRenderer.swift */; };
 		B291AF8223F95B9C000D5A4F /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = B291AF8123F95B9C000D5A4F /* Shaders.metal */; };
+		B2B8D8F82404465200F9393D /* ViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B8D8F72404465200F9393D /* ViewBuilder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,8 +49,9 @@
 		B291AF7023F958E2000D5A4F /* ImageEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B291AF7423F958E2000D5A4F /* ImageEditorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEditorTests.swift; sourceTree = "<group>"; };
 		B291AF7623F958E2000D5A4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B291AF7F23F958F1000D5A4F /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		B291AF7F23F958F1000D5A4F /* TextureRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureRenderer.swift; sourceTree = "<group>"; };
 		B291AF8123F95B9C000D5A4F /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		B2B8D8F72404465200F9393D /* ViewBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewBuilder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 		B291AF5C23F958DD000D5A4F /* ImageEditor */ = {
 			isa = PBXGroup;
 			children = (
+				B2B8D8F62404464A00F9393D /* Helpers */,
 				B27A67A62402DE4E001E938D /* Kernels */,
 				B27A67A22402B736001E938D /* peru.jpeg */,
 				B291AF5D23F958DD000D5A4F /* AppDelegate.swift */,
@@ -108,7 +111,7 @@
 				B291AF6623F958E2000D5A4F /* Assets.xcassets */,
 				B291AF6823F958E2000D5A4F /* LaunchScreen.storyboard */,
 				B291AF6B23F958E2000D5A4F /* Info.plist */,
-				B291AF7F23F958F1000D5A4F /* Renderer.swift */,
+				B291AF7F23F958F1000D5A4F /* TextureRenderer.swift */,
 				B27A67A023FB1F62001E938D /* TextureLoader.swift */,
 				B291AF8123F95B9C000D5A4F /* Shaders.metal */,
 				B27A67A42402DE3F001E938D /* Kernel.swift */,
@@ -123,6 +126,14 @@
 				B291AF7623F958E2000D5A4F /* Info.plist */,
 			);
 			path = ImageEditorTests;
+			sourceTree = "<group>";
+		};
+		B2B8D8F62404464A00F9393D /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				B2B8D8F72404465200F9393D /* ViewBuilder.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -227,8 +238,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B291AF8023F958F1000D5A4F /* Renderer.swift in Sources */,
+				B291AF8023F958F1000D5A4F /* TextureRenderer.swift in Sources */,
 				B291AF8223F95B9C000D5A4F /* Shaders.metal in Sources */,
+				B2B8D8F82404465200F9393D /* ViewBuilder.swift in Sources */,
 				B27A67A123FB1F62001E938D /* TextureLoader.swift in Sources */,
 				B27A67A82402DE55001E938D /* BrithnessKernel.swift in Sources */,
 				B291AF6223F958DD000D5A4F /* ViewController.swift in Sources */,
