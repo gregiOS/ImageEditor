@@ -10,6 +10,6 @@ import Foundation
 import Metal
 
 protocol Kernel {
-    var functionName: String { get }
     func operation(encoder: MTLComputeCommandEncoder)
+    func computedPipelineState(from library: MTLLibrary, using device: MTLDevice) -> MTLComputePipelineState?
 }

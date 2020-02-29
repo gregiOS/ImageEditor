@@ -15,31 +15,28 @@ class TextureRenderer {
     let library: MTLLibrary
     let commandQueue: MTLCommandQueue
 
-    var brithness: Float = 0
-
     init(device: MTLDevice) throws {
         guard let libraryPath = Bundle.main.path(forResource: "default", ofType: "metallib") else {
             throw Error.libraryNotExists
         }
-
+        guard let commandQueue = device.makeCommandQueue() else {
+            throw Error.cannotInitializeCommandQueue
+        }
         self.device = device
         self.library = try device.makeLibrary(filepath: libraryPath)
-        self.commandQueue = device.makeCommandQueue()!
+        self.commandQueue = commandQueue
     }
 
     func apply(kernel: Kernel, inTexture: MTLTexture, into drawable: CAMetalDrawable) {
         guard let commandBuffer = commandQueue.makeCommandBuffer(),
             let commandEncoder = commandBuffer.makeComputeCommandEncoder() else { return }
 
-        let outTexture = drawable.texture
-
-        let threads = makeThreadgroups(textureWidth: outTexture.width, textureHeight: outTexture.height)
-
-        guard let kernelFunction = library.makeFunction(name: kernel.functionName),
-            let pipelineState = try? device.makeComputePipelineState(function: kernelFunction) else {
-                // todo: handle optional
-                return
+        guard let pipelineState = kernel.computedPipelineState(from: library, using: device) else {
+            return
         }
+
+        let outTexture = drawable.texture
+        let threads = makeThreadgroups(textureWidth: outTexture.width, textureHeight: outTexture.height)
 
         commandEncoder.setComputePipelineState(pipelineState)
         commandEncoder.setTexture(inTexture, index: 0)
@@ -71,5 +68,6 @@ extension TextureRenderer {
         case libraryNotExists
         case functionNotFound
         case deviceNotExists
+        case cannotInitializeCommandQueue
     }
 }

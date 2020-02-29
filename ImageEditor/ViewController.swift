@@ -12,7 +12,7 @@ import Metal
 
 class ViewController: UIViewController {
     private lazy var metalView: MTKView = ViewBuilder.make(inside: view)
-    private lazy var slider: UISlider = ViewBuilder.make(inside: view)
+    private lazy var brithnessSlider: UISlider = ViewBuilder.make(inside: view)
     private lazy var brithnessImageView: UIImageView = ViewBuilder.make(inside: view) {
         $0.image = #imageLiteral(resourceName: "brithness")
         $0.contentMode = .scaleAspectFit
@@ -23,10 +23,11 @@ class ViewController: UIViewController {
     var textureRenderer: TextureRenderer!
 
     var inTexture: MTLTexture?
-    var currentKernels: [Kernel] = [BrithnessKernel(brithness: 0)]
+    var currentKernels: [Kernel] = [BrightnessKernel(brightness: 0)]
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .black
         initializeConstraints()
         setupBrithnessSlider()
         setupMetalView()
@@ -44,15 +45,15 @@ class ViewController: UIViewController {
             brithnessImageView.bottomAnchor.constraint(equalTo: layoutGuide.bottomAnchor),
             brithnessImageView.heightAnchor.constraint(equalToConstant: 25),
             brithnessImageView.widthAnchor.constraint(equalToConstant: 25),
-            slider.bottomAnchor.constraint(equalTo: layoutGuide.bottomAnchor),
-            slider.leadingAnchor.constraint(equalTo: brithnessImageView.trailingAnchor, constant: 12),
-            slider.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            brithnessSlider.bottomAnchor.constraint(equalTo: layoutGuide.bottomAnchor),
+            brithnessSlider.leadingAnchor.constraint(equalTo: brithnessImageView.trailingAnchor, constant: 12),
+            brithnessSlider.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 
     private func setupBrithnessSlider() {
-        slider.addTarget(self, action: #selector(didChangeState), for: .valueChanged)
-        slider.value = 0.5
+        brithnessSlider.addTarget(self, action: #selector(didChangeState), for: .valueChanged)
+        brithnessSlider.value = 0.5
     }
 
     private func setupMetalView() {
@@ -67,25 +68,31 @@ class ViewController: UIViewController {
             textureRenderer = try TextureRenderer(device: device)
             textureLoader = TextureLoader(device: device)
             metalView.device = device
-            inTexture = try textureLoader.get(named: "peru", extension: "jpeg")
+            inTexture = try textureLoader.newTexture(with: #imageLiteral(resourceName: "peru.jpeg"))
         } catch {
-            assertionFailure("Error occured whiel setup metal: \(error)")
+            assertionFailure("Error occured: \(error)")
         }
     }
 
     @objc func didChangeState(sender: UISlider) {
-        guard let index = currentKernels.firstIndex(where: { $0 is BrithnessKernel }) else { return }
-        currentKernels[index] = BrithnessKernel(brithness: sender.value - 0.5)
+        guard let index = currentKernels.firstIndex(where: { $0 is BrightnessKernel }) else { return }
+        var brightnessKernel = currentKernels[index] as! BrightnessKernel
+        brightnessKernel.brightness = sender.value - 0.5
+        currentKernels[index] = brightnessKernel
     }
 
+    override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
 }
 
 extension ViewController: MTKViewDelegate {
     func draw(in view: MTKView) {
         guard let inTexture = inTexture, let drawable = metalView.currentDrawable else { return }
-        currentKernels.forEach { kernel in
-            textureRenderer.apply(kernel: kernel, inTexture: inTexture, into: drawable)
+        autoreleasepool { [weak self] in
+            self?.currentKernels.forEach { kernel in
+                self?.textureRenderer.apply(kernel: kernel, inTexture: inTexture, into: drawable)
+            }
         }
+
     }
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
